@@ -1,0 +1,523 @@
+
+hal_uart.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000268  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000002dc  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000002  00800060  00800060  000002dc  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000002dc  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000030c  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000070  00000000  00000000  00000348  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000c93  00000000  00000000  000003b8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 0000073b  00000000  00000000  0000104b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000505  00000000  00000000  00001786  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000148  00000000  00000000  00001c8c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    000006aa  00000000  00000000  00001dd4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000003cf  00000000  00000000  0000247e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000078  00000000  00000000  0000284d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 68 00 	jmp	0xd0	; 0xd0 <__vector_13>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__vector_15>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a2 36       	cpi	r26, 0x62	; 98
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 01 01 	call	0x202	; 0x202 <main>
+  74:	0c 94 32 01 	jmp	0x264	; 0x264 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <__vector_15>:
+#include <avr/interrupt.h>
+
+gcfg_hal_uart_t* g_obj_adress;
+
+ISR(USART_TXC_vect)
+{
+  7c:	1f 92       	push	r1
+  7e:	0f 92       	push	r0
+  80:	0f b6       	in	r0, 0x3f	; 63
+  82:	0f 92       	push	r0
+  84:	11 24       	eor	r1, r1
+  86:	2f 93       	push	r18
+  88:	3f 93       	push	r19
+  8a:	4f 93       	push	r20
+  8c:	5f 93       	push	r21
+  8e:	6f 93       	push	r22
+  90:	7f 93       	push	r23
+  92:	8f 93       	push	r24
+  94:	9f 93       	push	r25
+  96:	af 93       	push	r26
+  98:	bf 93       	push	r27
+  9a:	ef 93       	push	r30
+  9c:	ff 93       	push	r31
+	g_obj_adress->trans_cb_func();
+  9e:	e0 91 60 00 	lds	r30, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+  a2:	f0 91 61 00 	lds	r31, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+  a6:	01 84       	ldd	r0, Z+9	; 0x09
+  a8:	f2 85       	ldd	r31, Z+10	; 0x0a
+  aa:	e0 2d       	mov	r30, r0
+  ac:	09 95       	icall
+}
+  ae:	ff 91       	pop	r31
+  b0:	ef 91       	pop	r30
+  b2:	bf 91       	pop	r27
+  b4:	af 91       	pop	r26
+  b6:	9f 91       	pop	r25
+  b8:	8f 91       	pop	r24
+  ba:	7f 91       	pop	r23
+  bc:	6f 91       	pop	r22
+  be:	5f 91       	pop	r21
+  c0:	4f 91       	pop	r20
+  c2:	3f 91       	pop	r19
+  c4:	2f 91       	pop	r18
+  c6:	0f 90       	pop	r0
+  c8:	0f be       	out	0x3f, r0	; 63
+  ca:	0f 90       	pop	r0
+  cc:	1f 90       	pop	r1
+  ce:	18 95       	reti
+
+000000d0 <__vector_13>:
+
+ISR(USART_RXC_vect)
+{
+  d0:	1f 92       	push	r1
+  d2:	0f 92       	push	r0
+  d4:	0f b6       	in	r0, 0x3f	; 63
+  d6:	0f 92       	push	r0
+  d8:	11 24       	eor	r1, r1
+  da:	2f 93       	push	r18
+  dc:	3f 93       	push	r19
+  de:	4f 93       	push	r20
+  e0:	5f 93       	push	r21
+  e2:	6f 93       	push	r22
+  e4:	7f 93       	push	r23
+  e6:	8f 93       	push	r24
+  e8:	9f 93       	push	r25
+  ea:	af 93       	push	r26
+  ec:	bf 93       	push	r27
+  ee:	ef 93       	push	r30
+  f0:	ff 93       	push	r31
+	g_obj_adress->receive_cb_func();
+  f2:	e0 91 60 00 	lds	r30, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+  f6:	f0 91 61 00 	lds	r31, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+  fa:	03 84       	ldd	r0, Z+11	; 0x0b
+  fc:	f4 85       	ldd	r31, Z+12	; 0x0c
+  fe:	e0 2d       	mov	r30, r0
+ 100:	09 95       	icall
+}
+ 102:	ff 91       	pop	r31
+ 104:	ef 91       	pop	r30
+ 106:	bf 91       	pop	r27
+ 108:	af 91       	pop	r26
+ 10a:	9f 91       	pop	r25
+ 10c:	8f 91       	pop	r24
+ 10e:	7f 91       	pop	r23
+ 110:	6f 91       	pop	r22
+ 112:	5f 91       	pop	r21
+ 114:	4f 91       	pop	r20
+ 116:	3f 91       	pop	r19
+ 118:	2f 91       	pop	r18
+ 11a:	0f 90       	pop	r0
+ 11c:	0f be       	out	0x3f, r0	; 63
+ 11e:	0f 90       	pop	r0
+ 120:	1f 90       	pop	r1
+ 122:	18 95       	reti
+
+00000124 <hal_uart_init>:
+
+
+ecore_s8 hal_uart_init(gcfg_hal_uart_t* obj)
+{
+ 124:	fc 01       	movw	r30, r24
+	ecore_s8 ret_val = E_OK;
+	if (obj != NULL)
+ 126:	00 97       	sbiw	r24, 0x00	; 0
+ 128:	09 f4       	brne	.+2      	; 0x12c <hal_uart_init+0x8>
+ 12a:	4f c0       	rjmp	.+158    	; 0x1ca <hal_uart_init+0xa6>
+	{
+		/******Baud Rate config******/
+		ecore_u32 ubrr_val;
+		g_obj_adress = obj;
+ 12c:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 130:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
+		if ((obj->synch_mode == UART_ASYNCH_MODE) && (obj->speed_mode == UART_NORMAL_SPEED_MODE))
+ 134:	83 81       	ldd	r24, Z+3	; 0x03
+ 136:	81 11       	cpse	r24, r1
+ 138:	0f c0       	rjmp	.+30     	; 0x158 <hal_uart_init+0x34>
+ 13a:	84 81       	ldd	r24, Z+4	; 0x04
+ 13c:	81 11       	cpse	r24, r1
+ 13e:	05 c0       	rjmp	.+10     	; 0x14a <hal_uart_init+0x26>
+		{
+			ubrr_val = (ecore_u32)((UART_FOSC/(16*UART_BAUD))-1);
+			*(volatile ecore_u8*)(0x40) = (ecore_u8)(ubrr_val >> 8);
+ 140:	10 bc       	out	0x20, r1	; 32
+			*(volatile ecore_u8*)(0x29) = (ecore_u8)ubrr_val;
+ 142:	83 e3       	ldi	r24, 0x33	; 51
+ 144:	89 b9       	out	0x09, r24	; 9
+}
+
+
+ecore_s8 hal_uart_init(gcfg_hal_uart_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 146:	81 e0       	ldi	r24, 0x01	; 1
+		g_obj_adress = obj;
+		if ((obj->synch_mode == UART_ASYNCH_MODE) && (obj->speed_mode == UART_NORMAL_SPEED_MODE))
+		{
+			ubrr_val = (ecore_u32)((UART_FOSC/(16*UART_BAUD))-1);
+			*(volatile ecore_u8*)(0x40) = (ecore_u8)(ubrr_val >> 8);
+			*(volatile ecore_u8*)(0x29) = (ecore_u8)ubrr_val;
+ 148:	12 c0       	rjmp	.+36     	; 0x16e <hal_uart_init+0x4a>
+		} 
+		else if((obj->synch_mode == UART_ASYNCH_MODE) && (obj->speed_mode == UART_DOUBLE_SPEED_MODE))
+ 14a:	81 30       	cpi	r24, 0x01	; 1
+ 14c:	69 f4       	brne	.+26     	; 0x168 <hal_uart_init+0x44>
+		{
+			ubrr_val = (ecore_u32)((UART_FOSC/(8*UART_BAUD))-1);
+			*(volatile ecore_u8*)(0x40) = (ecore_u8)(ubrr_val >> 8);
+ 14e:	10 bc       	out	0x20, r1	; 32
+			*(volatile ecore_u8*)(0x29) = (ecore_u8)ubrr_val;
+ 150:	87 e6       	ldi	r24, 0x67	; 103
+ 152:	89 b9       	out	0x09, r24	; 9
+}
+
+
+ecore_s8 hal_uart_init(gcfg_hal_uart_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 154:	81 e0       	ldi	r24, 0x01	; 1
+		} 
+		else if((obj->synch_mode == UART_ASYNCH_MODE) && (obj->speed_mode == UART_DOUBLE_SPEED_MODE))
+		{
+			ubrr_val = (ecore_u32)((UART_FOSC/(8*UART_BAUD))-1);
+			*(volatile ecore_u8*)(0x40) = (ecore_u8)(ubrr_val >> 8);
+			*(volatile ecore_u8*)(0x29) = (ecore_u8)ubrr_val;
+ 156:	0b c0       	rjmp	.+22     	; 0x16e <hal_uart_init+0x4a>
+		}
+		else if(obj->synch_mode == UART_SYNCH_MODE)
+ 158:	80 34       	cpi	r24, 0x40	; 64
+ 15a:	41 f4       	brne	.+16     	; 0x16c <hal_uart_init+0x48>
+		{
+			ubrr_val = (ecore_u32)((UART_FOSC/(2*UART_BAUD))-1);
+			*(volatile ecore_u8*)(0x40) = (ecore_u8)(ubrr_val >> 8);
+ 15c:	81 e0       	ldi	r24, 0x01	; 1
+ 15e:	80 bd       	out	0x20, r24	; 32
+			*(volatile ecore_u8*)(0x29) = (ecore_u8)ubrr_val;
+ 160:	8f e9       	ldi	r24, 0x9F	; 159
+ 162:	89 b9       	out	0x09, r24	; 9
+}
+
+
+ecore_s8 hal_uart_init(gcfg_hal_uart_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 164:	81 e0       	ldi	r24, 0x01	; 1
+ 166:	03 c0       	rjmp	.+6      	; 0x16e <hal_uart_init+0x4a>
+			*(volatile ecore_u8*)(0x40) = (ecore_u8)(ubrr_val >> 8);
+			*(volatile ecore_u8*)(0x29) = (ecore_u8)ubrr_val;
+		}
+		else
+		{
+			ret_val = INVALID_ARG;
+ 168:	8d ec       	ldi	r24, 0xCD	; 205
+ 16a:	01 c0       	rjmp	.+2      	; 0x16e <hal_uart_init+0x4a>
+ 16c:	8d ec       	ldi	r24, 0xCD	; 205
+		}
+		/*****Char Size******/
+		if (obj->char_size != UART_9_BIT_CHAR)
+ 16e:	90 85       	ldd	r25, Z+8	; 0x08
+ 170:	9e 30       	cpi	r25, 0x0E	; 14
+ 172:	19 f0       	breq	.+6      	; 0x17a <hal_uart_init+0x56>
+		{
+			*(volatile ecore_u8*)(0x40) = (1<<7) | (obj->char_size);
+ 174:	90 68       	ori	r25, 0x80	; 128
+ 176:	90 bd       	out	0x20, r25	; 32
+ 178:	04 c0       	rjmp	.+8      	; 0x182 <hal_uart_init+0x5e>
+		} 
+		else if (obj->char_size == UART_9_BIT_CHAR)
+		{
+			*(volatile ecore_u8*)(0x40) = (1<<7) | ((obj->char_size)&0b11); //&0b11
+ 17a:	92 e8       	ldi	r25, 0x82	; 130
+ 17c:	90 bd       	out	0x20, r25	; 32
+			*(volatile ecore_u8*)(0x2A) = (1<<2);
+ 17e:	94 e0       	ldi	r25, 0x04	; 4
+ 180:	9a b9       	out	0x0a, r25	; 10
+		}
+		/*****Double speed config******/
+		if (obj->speed_mode == UART_DOUBLE_SPEED_MODE)
+ 182:	94 81       	ldd	r25, Z+4	; 0x04
+ 184:	91 30       	cpi	r25, 0x01	; 1
+ 186:	09 f4       	brne	.+2      	; 0x18a <hal_uart_init+0x66>
+		{
+			*(volatile ecore_u8*)(0x2B) |= (1<<1);
+ 188:	59 9a       	sbi	0x0b, 1	; 11
+		} 
+		/*****parity config******/
+		*(volatile ecore_u8*)(0x40) |= (1<<7) | (obj->parity_state);
+ 18a:	20 b5       	in	r18, 0x20	; 32
+ 18c:	92 81       	ldd	r25, Z+2	; 0x02
+ 18e:	92 2b       	or	r25, r18
+ 190:	90 68       	ori	r25, 0x80	; 128
+ 192:	90 bd       	out	0x20, r25	; 32
+		/*****synch comm config******/
+		*(volatile ecore_u8*)(0x40) |= (1<<7) | (obj->synch_mode);
+ 194:	20 b5       	in	r18, 0x20	; 32
+ 196:	93 81       	ldd	r25, Z+3	; 0x03
+ 198:	92 2b       	or	r25, r18
+ 19a:	90 68       	ori	r25, 0x80	; 128
+ 19c:	90 bd       	out	0x20, r25	; 32
+		/*****stop_bit config******/
+		*(volatile ecore_u8*)(0x40) |= (1<<7) | (obj->stop_bit_no);
+ 19e:	20 b5       	in	r18, 0x20	; 32
+ 1a0:	97 81       	ldd	r25, Z+7	; 0x07
+ 1a2:	92 2b       	or	r25, r18
+ 1a4:	90 68       	ori	r25, 0x80	; 128
+ 1a6:	90 bd       	out	0x20, r25	; 32
+		/*****Trans_int config******/
+		*(volatile ecore_u8*)(0x2A) |= (obj->trans_int_state);
+ 1a8:	2a b1       	in	r18, 0x0a	; 10
+ 1aa:	95 81       	ldd	r25, Z+5	; 0x05
+ 1ac:	92 2b       	or	r25, r18
+ 1ae:	9a b9       	out	0x0a, r25	; 10
+		/*****Receive_int config******/
+		*(volatile ecore_u8*)(0x2A) |= (obj->receive_int_state);
+ 1b0:	2a b1       	in	r18, 0x0a	; 10
+ 1b2:	96 81       	ldd	r25, Z+6	; 0x06
+ 1b4:	92 2b       	or	r25, r18
+ 1b6:	9a b9       	out	0x0a, r25	; 10
+		/*****Receive config******/
+		*(volatile ecore_u8*)(0x2A) |= (obj->receive_state);
+ 1b8:	2a b1       	in	r18, 0x0a	; 10
+ 1ba:	91 81       	ldd	r25, Z+1	; 0x01
+ 1bc:	92 2b       	or	r25, r18
+ 1be:	9a b9       	out	0x0a, r25	; 10
+		/*****Transmit config******/
+		*(volatile ecore_u8*)(0x2A) |= (obj->trans_state);
+ 1c0:	2a b1       	in	r18, 0x0a	; 10
+ 1c2:	90 81       	ld	r25, Z
+ 1c4:	92 2b       	or	r25, r18
+ 1c6:	9a b9       	out	0x0a, r25	; 10
+ 1c8:	08 95       	ret
+	} 
+	else
+	{
+		ret_val = INVALID_ARG;
+ 1ca:	8d ec       	ldi	r24, 0xCD	; 205
+	}
+	return ret_val;
+}
+ 1cc:	08 95       	ret
+
+000001ce <hal_uart_trans>:
+
+ecore_s8 hal_uart_trans(ecore_u16 data)
+{
+	ecore_s8 ret_val = E_OK;
+	if (g_obj_adress->trans_state == TX_ON)
+ 1ce:	e0 91 60 00 	lds	r30, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 1d2:	f0 91 61 00 	lds	r31, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
+ 1d6:	20 81       	ld	r18, Z
+ 1d8:	28 30       	cpi	r18, 0x08	; 8
+ 1da:	61 f4       	brne	.+24     	; 0x1f4 <hal_uart_trans+0x26>
+	{
+		while(!(*(volatile ecore_u8*)(0x2B) & (1<<5)));
+ 1dc:	5d 9b       	sbis	0x0b, 5	; 11
+ 1de:	fe cf       	rjmp	.-4      	; 0x1dc <hal_uart_trans+0xe>
+		if (g_obj_adress->char_size == UART_9_BIT_CHAR)
+ 1e0:	20 85       	ldd	r18, Z+8	; 0x08
+ 1e2:	2e 30       	cpi	r18, 0x0E	; 14
+ 1e4:	21 f4       	brne	.+8      	; 0x1ee <hal_uart_trans+0x20>
+		{
+			*(volatile ecore_u8*)(0x2A) |= ((data >> 8)&1);
+ 1e6:	2a b1       	in	r18, 0x0a	; 10
+ 1e8:	91 70       	andi	r25, 0x01	; 1
+ 1ea:	92 2b       	or	r25, r18
+ 1ec:	9a b9       	out	0x0a, r25	; 10
+		}
+		*(volatile ecore_u8*)(0x2C) = (ecore_u8)data;
+ 1ee:	8c b9       	out	0x0c, r24	; 12
+	return ret_val;
+}
+
+ecore_s8 hal_uart_trans(ecore_u16 data)
+{
+	ecore_s8 ret_val = E_OK;
+ 1f0:	81 e0       	ldi	r24, 0x01	; 1
+ 1f2:	08 95       	ret
+		}
+		*(volatile ecore_u8*)(0x2C) = (ecore_u8)data;
+	}
+	else
+	{
+		ret_val = INVALID_ARG;
+ 1f4:	8d ec       	ldi	r24, 0xCD	; 205
+	}
+	return ret_val;
+}
+ 1f6:	08 95       	ret
+
+000001f8 <cb_fun>:
+#define SET_INPUT_DIR(reg,pin_no) reg &= ~(1<<pin_no)
+#define TOGGEL_LED(reg,pin_no) reg ^= (1<<pin_no)
+
+void cb_fun(void)
+{
+	TOGGEL_LED(PORTA,1);
+ 1f8:	9b b3       	in	r25, 0x1b	; 27
+ 1fa:	82 e0       	ldi	r24, 0x02	; 2
+ 1fc:	89 27       	eor	r24, r25
+ 1fe:	8b bb       	out	0x1b, r24	; 27
+ 200:	08 95       	ret
+
+00000202 <main>:
+}
+
+int main(void)
+{
+ 202:	cf 93       	push	r28
+ 204:	df 93       	push	r29
+ 206:	cd b7       	in	r28, 0x3d	; 61
+ 208:	de b7       	in	r29, 0x3e	; 62
+ 20a:	2d 97       	sbiw	r28, 0x0d	; 13
+ 20c:	0f b6       	in	r0, 0x3f	; 63
+ 20e:	f8 94       	cli
+ 210:	de bf       	out	0x3e, r29	; 62
+ 212:	0f be       	out	0x3f, r0	; 63
+ 214:	cd bf       	out	0x3d, r28	; 61
+	
+	(*(volatile ecore_u8*)(0x5F)) |= (1<<7); 
+ 216:	8f b7       	in	r24, 0x3f	; 63
+ 218:	80 68       	ori	r24, 0x80	; 128
+ 21a:	8f bf       	out	0x3f, r24	; 63
+	SET_OUT_DIR(DDRA,1);
+ 21c:	d1 9a       	sbi	0x1a, 1	; 26
+	ecore_u16 data_to_send ='5';
+	ecore_u16 received_data =0 ;
+	
+	//create uart obj
+	gcfg_hal_uart_t my_uart_obj;
+	my_uart_obj.trans_state = TX_ON;
+ 21e:	88 e0       	ldi	r24, 0x08	; 8
+ 220:	89 83       	std	Y+1, r24	; 0x01
+	my_uart_obj.trans_int_state = UART_TX_INT_ON;
+ 222:	80 e4       	ldi	r24, 0x40	; 64
+ 224:	8e 83       	std	Y+6, r24	; 0x06
+	my_uart_obj.trans_cb_func = cb_fun;
+ 226:	8c ef       	ldi	r24, 0xFC	; 252
+ 228:	90 e0       	ldi	r25, 0x00	; 0
+ 22a:	9b 87       	std	Y+11, r25	; 0x0b
+ 22c:	8a 87       	std	Y+10, r24	; 0x0a
+	
+	my_uart_obj.receive_state = RX_OFF;
+ 22e:	1a 82       	std	Y+2, r1	; 0x02
+	my_uart_obj.receive_int_state = UART_RX_INT_OFF;
+ 230:	1f 82       	std	Y+7, r1	; 0x07
+	//my_uart_obj.receive_cb_func = toggel_port_a;
+	
+	my_uart_obj.synch_mode = UART_ASYNCH_MODE;
+ 232:	1c 82       	std	Y+4, r1	; 0x04
+	my_uart_obj.speed_mode = UART_NORMAL_SPEED_MODE;
+ 234:	1d 82       	std	Y+5, r1	; 0x05
+	my_uart_obj.parity_state = UART_ODD_PATITY;
+ 236:	80 e3       	ldi	r24, 0x30	; 48
+ 238:	8b 83       	std	Y+3, r24	; 0x03
+	my_uart_obj.char_size = UART_8_BIT_CHAR;
+ 23a:	86 e0       	ldi	r24, 0x06	; 6
+ 23c:	89 87       	std	Y+9, r24	; 0x09
+	my_uart_obj.stop_bit_no = UART_ONE_STOPBIT;
+ 23e:	18 86       	std	Y+8, r1	; 0x08
+	
+	
+	
+	
+	hal_uart_init(&my_uart_obj);
+ 240:	ce 01       	movw	r24, r28
+ 242:	01 96       	adiw	r24, 0x01	; 1
+ 244:	0e 94 92 00 	call	0x124	; 0x124 <hal_uart_init>
+	//hal_uart_deinit();
+	
+    /* Replace with your application code */
+    while (1) 
+    {
+		 hal_uart_trans(data_to_send);
+ 248:	85 e3       	ldi	r24, 0x35	; 53
+ 24a:	90 e0       	ldi	r25, 0x00	; 0
+ 24c:	0e 94 e7 00 	call	0x1ce	; 0x1ce <hal_uart_trans>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 250:	2f e3       	ldi	r18, 0x3F	; 63
+ 252:	8d e0       	ldi	r24, 0x0D	; 13
+ 254:	93 e0       	ldi	r25, 0x03	; 3
+ 256:	21 50       	subi	r18, 0x01	; 1
+ 258:	80 40       	sbci	r24, 0x00	; 0
+ 25a:	90 40       	sbci	r25, 0x00	; 0
+ 25c:	e1 f7       	brne	.-8      	; 0x256 <main+0x54>
+ 25e:	00 c0       	rjmp	.+0      	; 0x260 <main+0x5e>
+ 260:	00 00       	nop
+ 262:	f2 cf       	rjmp	.-28     	; 0x248 <main+0x46>
+
+00000264 <_exit>:
+ 264:	f8 94       	cli
+
+00000266 <__stop_program>:
+ 266:	ff cf       	rjmp	.-2      	; 0x266 <__stop_program>

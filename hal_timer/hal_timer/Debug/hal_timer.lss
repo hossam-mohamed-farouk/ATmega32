@@ -1,0 +1,548 @@
+
+hal_timer.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000023c  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000006  00800060  0000023c  000002b0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000002b6  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002e8  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000078  00000000  00000000  00000324  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000abd  00000000  00000000  0000039c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000642  00000000  00000000  00000e59  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000005bf  00000000  00000000  0000149b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000f0  00000000  00000000  00001a5c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    0000057c  00000000  00000000  00001b4c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000004a8  00000000  00000000  000020c8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000058  00000000  00000000  00002570  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  14:	0c 94 e1 00 	jmp	0x1c2	; 0x1c2 <__vector_5>
+  18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  24:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  28:	0c 94 f3 00 	jmp	0x1e6	; 0x1e6 <__vector_10>
+  2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	ec e3       	ldi	r30, 0x3C	; 60
+  68:	f2 e0       	ldi	r31, 0x02	; 2
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+  70:	a6 36       	cpi	r26, 0x66	; 102
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
+  76:	0e 94 05 01 	call	0x20a	; 0x20a <main>
+  7a:	0c 94 1c 01 	jmp	0x238	; 0x238 <_exit>
+
+0000007e <__bad_interrupt>:
+  7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <hal_timer_init>:
+#include "hal_system_errors.h"
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+  82:	fc 01       	movw	r30, r24
+	ecore_s8 ret_val = E_OK;
+	if (obj != NULL)
+  84:	89 2b       	or	r24, r25
+  86:	09 f4       	brne	.+2      	; 0x8a <hal_timer_init+0x8>
+  88:	8c c0       	rjmp	.+280    	; 0x1a2 <hal_timer_init+0x120>
+	{
+		if (obj->t_base == TIMER_0)
+  8a:	80 81       	ld	r24, Z
+  8c:	83 35       	cpi	r24, 0x53	; 83
+  8e:	09 f0       	breq	.+2      	; 0x92 <hal_timer_init+0x10>
+  90:	44 c0       	rjmp	.+136    	; 0x11a <hal_timer_init+0x98>
+		{
+			if (obj->int_s == INTERRUPT_EN)
+  92:	83 81       	ldd	r24, Z+3	; 0x03
+  94:	81 11       	cpse	r24, r1
+  96:	20 c0       	rjmp	.+64     	; 0xd8 <hal_timer_init+0x56>
+			{
+				if (obj->t_mode == NORMAL_MODE)
+  98:	81 81       	ldd	r24, Z+1	; 0x01
+  9a:	81 11       	cpse	r24, r1
+  9c:	0c c0       	rjmp	.+24     	; 0xb6 <hal_timer_init+0x34>
+				{
+					*(volatile ecore_u8*)(0x5f) |= (1<<7);
+  9e:	8f b7       	in	r24, 0x3f	; 63
+  a0:	80 68       	ori	r24, 0x80	; 128
+  a2:	8f bf       	out	0x3f, r24	; 63
+					*(volatile ecore_u8*)(0x59) |= (1<<0);
+  a4:	89 b7       	in	r24, 0x39	; 57
+  a6:	81 60       	ori	r24, 0x01	; 1
+  a8:	89 bf       	out	0x39, r24	; 57
+					*(volatile ecore_u8*)(0x53) |= (obj->t_clk);
+  aa:	93 b7       	in	r25, 0x33	; 51
+  ac:	82 81       	ldd	r24, Z+2	; 0x02
+  ae:	89 2b       	or	r24, r25
+  b0:	83 bf       	out	0x33, r24	; 51
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+  b2:	81 e0       	ldi	r24, 0x01	; 1
+  b4:	08 95       	ret
+				{
+					*(volatile ecore_u8*)(0x5f) |= (1<<7);
+					*(volatile ecore_u8*)(0x59) |= (1<<0);
+					*(volatile ecore_u8*)(0x53) |= (obj->t_clk);
+				}
+				else if (obj->t_mode == COMPARE_MATCH_OUTPUT_MODE)
+  b6:	81 30       	cpi	r24, 0x01	; 1
+  b8:	09 f0       	breq	.+2      	; 0xbc <hal_timer_init+0x3a>
+  ba:	75 c0       	rjmp	.+234    	; 0x1a6 <hal_timer_init+0x124>
+				{
+					*(volatile ecore_u8*)(0x5f) |= (1<<7);
+  bc:	8f b7       	in	r24, 0x3f	; 63
+  be:	80 68       	ori	r24, 0x80	; 128
+  c0:	8f bf       	out	0x3f, r24	; 63
+					*(volatile ecore_u8*)(0x59) |= (1<<1);
+  c2:	89 b7       	in	r24, 0x39	; 57
+  c4:	82 60       	ori	r24, 0x02	; 2
+  c6:	89 bf       	out	0x39, r24	; 57
+					*(volatile ecore_u8*)(0x5c) = (obj->cmp_value);
+  c8:	85 81       	ldd	r24, Z+5	; 0x05
+  ca:	8c bf       	out	0x3c, r24	; 60
+					*(volatile ecore_u8*)(0x53) |= (obj->t_clk);
+  cc:	93 b7       	in	r25, 0x33	; 51
+  ce:	82 81       	ldd	r24, Z+2	; 0x02
+  d0:	89 2b       	or	r24, r25
+  d2:	83 bf       	out	0x33, r24	; 51
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+  d4:	81 e0       	ldi	r24, 0x01	; 1
+  d6:	08 95       	ret
+				else
+				{
+					ret_val = INVALID_ARG;
+				}
+			}
+			else if (obj->int_s == INTERRUPT_DIS)
+  d8:	81 30       	cpi	r24, 0x01	; 1
+  da:	09 f0       	breq	.+2      	; 0xde <hal_timer_init+0x5c>
+  dc:	66 c0       	rjmp	.+204    	; 0x1aa <hal_timer_init+0x128>
+			{
+				if (obj->t_mode == NORMAL_MODE)
+  de:	81 81       	ldd	r24, Z+1	; 0x01
+  e0:	81 11       	cpse	r24, r1
+  e2:	06 c0       	rjmp	.+12     	; 0xf0 <hal_timer_init+0x6e>
+				{
+					*(volatile ecore_u8*)(0x53) |= (obj->t_clk);
+  e4:	93 b7       	in	r25, 0x33	; 51
+  e6:	82 81       	ldd	r24, Z+2	; 0x02
+  e8:	89 2b       	or	r24, r25
+  ea:	83 bf       	out	0x33, r24	; 51
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+  ec:	81 e0       	ldi	r24, 0x01	; 1
+  ee:	08 95       	ret
+			{
+				if (obj->t_mode == NORMAL_MODE)
+				{
+					*(volatile ecore_u8*)(0x53) |= (obj->t_clk);
+				}
+				else if (obj->t_mode == COMPARE_MATCH_OUTPUT_MODE)
+  f0:	81 30       	cpi	r24, 0x01	; 1
+  f2:	09 f0       	breq	.+2      	; 0xf6 <hal_timer_init+0x74>
+  f4:	5c c0       	rjmp	.+184    	; 0x1ae <hal_timer_init+0x12c>
+				{
+					*(volatile ecore_u8*)(0x53) |= 0b00001000;
+  f6:	83 b7       	in	r24, 0x33	; 51
+  f8:	88 60       	ori	r24, 0x08	; 8
+  fa:	83 bf       	out	0x33, r24	; 51
+					*(volatile ecore_u8*)(0x53) |= (1<<7);
+  fc:	83 b7       	in	r24, 0x33	; 51
+  fe:	80 68       	ori	r24, 0x80	; 128
+ 100:	83 bf       	out	0x33, r24	; 51
+					*(volatile ecore_u8*)(0x5c) = (obj->cmp_value);
+ 102:	85 81       	ldd	r24, Z+5	; 0x05
+ 104:	8c bf       	out	0x3c, r24	; 60
+					*(volatile ecore_u8*)(0x53) |= (obj->cmp_pin);
+ 106:	93 b7       	in	r25, 0x33	; 51
+ 108:	84 81       	ldd	r24, Z+4	; 0x04
+ 10a:	89 2b       	or	r24, r25
+ 10c:	83 bf       	out	0x33, r24	; 51
+					*(volatile ecore_u8*)(0x53) |= (obj->t_clk);
+ 10e:	93 b7       	in	r25, 0x33	; 51
+ 110:	82 81       	ldd	r24, Z+2	; 0x02
+ 112:	89 2b       	or	r24, r25
+ 114:	83 bf       	out	0x33, r24	; 51
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 116:	81 e0       	ldi	r24, 0x01	; 1
+ 118:	08 95       	ret
+				{
+					ret_val = INVALID_ARG;
+				}
+			}
+		}
+		else if (obj->t_base == TIMER_2)
+ 11a:	85 34       	cpi	r24, 0x45	; 69
+ 11c:	09 f0       	breq	.+2      	; 0x120 <hal_timer_init+0x9e>
+ 11e:	49 c0       	rjmp	.+146    	; 0x1b2 <hal_timer_init+0x130>
+		{
+			if (obj->int_s == INTERRUPT_EN)
+ 120:	83 81       	ldd	r24, Z+3	; 0x03
+ 122:	81 11       	cpse	r24, r1
+ 124:	1f c0       	rjmp	.+62     	; 0x164 <hal_timer_init+0xe2>
+			{
+				if (obj->t_mode == NORMAL_MODE)
+ 126:	81 81       	ldd	r24, Z+1	; 0x01
+ 128:	81 11       	cpse	r24, r1
+ 12a:	0c c0       	rjmp	.+24     	; 0x144 <hal_timer_init+0xc2>
+				{
+					*(volatile ecore_u8*)(0x5f) |= (1<<7);
+ 12c:	8f b7       	in	r24, 0x3f	; 63
+ 12e:	80 68       	ori	r24, 0x80	; 128
+ 130:	8f bf       	out	0x3f, r24	; 63
+					*(volatile ecore_u8*)(0x59) |= (1<<6);
+ 132:	89 b7       	in	r24, 0x39	; 57
+ 134:	80 64       	ori	r24, 0x40	; 64
+ 136:	89 bf       	out	0x39, r24	; 57
+					*(volatile ecore_u8*)(0x45) |= (obj->t_clk);
+ 138:	95 b5       	in	r25, 0x25	; 37
+ 13a:	82 81       	ldd	r24, Z+2	; 0x02
+ 13c:	89 2b       	or	r24, r25
+ 13e:	85 bd       	out	0x25, r24	; 37
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 140:	81 e0       	ldi	r24, 0x01	; 1
+ 142:	08 95       	ret
+				{
+					*(volatile ecore_u8*)(0x5f) |= (1<<7);
+					*(volatile ecore_u8*)(0x59) |= (1<<6);
+					*(volatile ecore_u8*)(0x45) |= (obj->t_clk);
+				}
+				else if (obj->t_mode == COMPARE_MATCH_OUTPUT_MODE)
+ 144:	81 30       	cpi	r24, 0x01	; 1
+ 146:	b9 f5       	brne	.+110    	; 0x1b6 <hal_timer_init+0x134>
+				{
+					*(volatile ecore_u8*)(0x5f) |= (1<<7);
+ 148:	8f b7       	in	r24, 0x3f	; 63
+ 14a:	80 68       	ori	r24, 0x80	; 128
+ 14c:	8f bf       	out	0x3f, r24	; 63
+					*(volatile ecore_u8*)(0x59) |= (1<<7);
+ 14e:	89 b7       	in	r24, 0x39	; 57
+ 150:	80 68       	ori	r24, 0x80	; 128
+ 152:	89 bf       	out	0x39, r24	; 57
+					*(volatile ecore_u8*)(0x43) = (obj->cmp_value);
+ 154:	85 81       	ldd	r24, Z+5	; 0x05
+ 156:	83 bd       	out	0x23, r24	; 35
+					*(volatile ecore_u8*)(0x45) |= (obj->t_clk);
+ 158:	95 b5       	in	r25, 0x25	; 37
+ 15a:	82 81       	ldd	r24, Z+2	; 0x02
+ 15c:	89 2b       	or	r24, r25
+ 15e:	85 bd       	out	0x25, r24	; 37
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 160:	81 e0       	ldi	r24, 0x01	; 1
+ 162:	08 95       	ret
+				else
+				{
+					ret_val = INVALID_ARG;
+				}
+			}
+			else if (obj->int_s == INTERRUPT_DIS)
+ 164:	81 30       	cpi	r24, 0x01	; 1
+ 166:	49 f5       	brne	.+82     	; 0x1ba <hal_timer_init+0x138>
+			{
+				if (obj->t_mode == NORMAL_MODE)
+ 168:	81 81       	ldd	r24, Z+1	; 0x01
+ 16a:	81 11       	cpse	r24, r1
+ 16c:	06 c0       	rjmp	.+12     	; 0x17a <hal_timer_init+0xf8>
+				{
+					*(volatile ecore_u8*)(0x45) |= (obj->t_clk);
+ 16e:	95 b5       	in	r25, 0x25	; 37
+ 170:	82 81       	ldd	r24, Z+2	; 0x02
+ 172:	89 2b       	or	r24, r25
+ 174:	85 bd       	out	0x25, r24	; 37
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 176:	81 e0       	ldi	r24, 0x01	; 1
+ 178:	08 95       	ret
+			{
+				if (obj->t_mode == NORMAL_MODE)
+				{
+					*(volatile ecore_u8*)(0x45) |= (obj->t_clk);
+				}
+				else if (obj->t_mode == COMPARE_MATCH_OUTPUT_MODE)
+ 17a:	81 30       	cpi	r24, 0x01	; 1
+ 17c:	01 f5       	brne	.+64     	; 0x1be <hal_timer_init+0x13c>
+				{
+					*(volatile ecore_u8*)(0x45) |= 0b00001000;
+ 17e:	85 b5       	in	r24, 0x25	; 37
+ 180:	88 60       	ori	r24, 0x08	; 8
+ 182:	85 bd       	out	0x25, r24	; 37
+					*(volatile ecore_u8*)(0x45) |= (1<<7);
+ 184:	85 b5       	in	r24, 0x25	; 37
+ 186:	80 68       	ori	r24, 0x80	; 128
+ 188:	85 bd       	out	0x25, r24	; 37
+					*(volatile ecore_u8*)(0x43) = (obj->cmp_value);
+ 18a:	85 81       	ldd	r24, Z+5	; 0x05
+ 18c:	83 bd       	out	0x23, r24	; 35
+					*(volatile ecore_u8*)(0x45) |= (obj->cmp_pin);
+ 18e:	95 b5       	in	r25, 0x25	; 37
+ 190:	84 81       	ldd	r24, Z+4	; 0x04
+ 192:	89 2b       	or	r24, r25
+ 194:	85 bd       	out	0x25, r24	; 37
+					*(volatile ecore_u8*)(0x45) |= (obj->t_clk);
+ 196:	95 b5       	in	r25, 0x25	; 37
+ 198:	82 81       	ldd	r24, Z+2	; 0x02
+ 19a:	89 2b       	or	r24, r25
+ 19c:	85 bd       	out	0x25, r24	; 37
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 19e:	81 e0       	ldi	r24, 0x01	; 1
+ 1a0:	08 95       	ret
+			}
+		}
+	}
+	else
+	{
+		ret_val = INVALID_ARG;
+ 1a2:	8d ec       	ldi	r24, 0xCD	; 205
+ 1a4:	08 95       	ret
+					*(volatile ecore_u8*)(0x5c) = (obj->cmp_value);
+					*(volatile ecore_u8*)(0x53) |= (obj->t_clk);
+				}
+				else
+				{
+					ret_val = INVALID_ARG;
+ 1a6:	8d ec       	ldi	r24, 0xCD	; 205
+ 1a8:	08 95       	ret
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 1aa:	81 e0       	ldi	r24, 0x01	; 1
+ 1ac:	08 95       	ret
+					*(volatile ecore_u8*)(0x53) |= (obj->cmp_pin);
+					*(volatile ecore_u8*)(0x53) |= (obj->t_clk);
+				}
+				else
+				{
+					ret_val = INVALID_ARG;
+ 1ae:	8d ec       	ldi	r24, 0xCD	; 205
+ 1b0:	08 95       	ret
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 1b2:	81 e0       	ldi	r24, 0x01	; 1
+ 1b4:	08 95       	ret
+					*(volatile ecore_u8*)(0x43) = (obj->cmp_value);
+					*(volatile ecore_u8*)(0x45) |= (obj->t_clk);
+				}
+				else
+				{
+					ret_val = INVALID_ARG;
+ 1b6:	8d ec       	ldi	r24, 0xCD	; 205
+ 1b8:	08 95       	ret
+
+//genum_timer_base_t timer_obj_addresses[MAX_NO_OF_TIMERS];
+
+ecore_s8 hal_timer_init(gcfg_hal_timer_t* obj)
+{
+	ecore_s8 ret_val = E_OK;
+ 1ba:	81 e0       	ldi	r24, 0x01	; 1
+ 1bc:	08 95       	ret
+					*(volatile ecore_u8*)(0x45) |= (obj->cmp_pin);
+					*(volatile ecore_u8*)(0x45) |= (obj->t_clk);
+				}
+				else
+				{
+					ret_val = INVALID_ARG;
+ 1be:	8d ec       	ldi	r24, 0xCD	; 205
+	else
+	{
+		ret_val = INVALID_ARG;
+	}
+	return ret_val;
+}
+ 1c0:	08 95       	ret
+
+000001c2 <__vector_5>:
+#define SET_OUT_DIR(reg,pin_no) reg|=(1<<pin_no)
+#define SET_INPUT_DIR(reg,pin_no) reg&=~(1<<pin_no)
+#define TOGGEL_LED(reg,pin_no) reg^=(1<<pin_no)
+
+ISR(TIMER2_OVF_vect)
+{
+ 1c2:	1f 92       	push	r1
+ 1c4:	0f 92       	push	r0
+ 1c6:	0f b6       	in	r0, 0x3f	; 63
+ 1c8:	0f 92       	push	r0
+ 1ca:	11 24       	eor	r1, r1
+ 1cc:	8f 93       	push	r24
+ 1ce:	9f 93       	push	r25
+	TOGGEL_LED(PORTC,0);
+ 1d0:	95 b3       	in	r25, 0x15	; 21
+ 1d2:	81 e0       	ldi	r24, 0x01	; 1
+ 1d4:	89 27       	eor	r24, r25
+ 1d6:	85 bb       	out	0x15, r24	; 21
+	//TOGGEL_LED(PORTB,0);
+	//_delay_ms(20);
+}
+ 1d8:	9f 91       	pop	r25
+ 1da:	8f 91       	pop	r24
+ 1dc:	0f 90       	pop	r0
+ 1de:	0f be       	out	0x3f, r0	; 63
+ 1e0:	0f 90       	pop	r0
+ 1e2:	1f 90       	pop	r1
+ 1e4:	18 95       	reti
+
+000001e6 <__vector_10>:
+ISR(TIMER0_COMP_vect)
+{
+ 1e6:	1f 92       	push	r1
+ 1e8:	0f 92       	push	r0
+ 1ea:	0f b6       	in	r0, 0x3f	; 63
+ 1ec:	0f 92       	push	r0
+ 1ee:	11 24       	eor	r1, r1
+ 1f0:	8f 93       	push	r24
+ 1f2:	9f 93       	push	r25
+	TOGGEL_LED(PORTB,0);
+ 1f4:	98 b3       	in	r25, 0x18	; 24
+ 1f6:	81 e0       	ldi	r24, 0x01	; 1
+ 1f8:	89 27       	eor	r24, r25
+ 1fa:	88 bb       	out	0x18, r24	; 24
+	//TOGGEL_LED(PORTC,0);
+	//_delay_ms(1);
+}
+ 1fc:	9f 91       	pop	r25
+ 1fe:	8f 91       	pop	r24
+ 200:	0f 90       	pop	r0
+ 202:	0f be       	out	0x3f, r0	; 63
+ 204:	0f 90       	pop	r0
+ 206:	1f 90       	pop	r1
+ 208:	18 95       	reti
+
+0000020a <main>:
+
+int main(void)
+{
+ 20a:	cf 93       	push	r28
+ 20c:	df 93       	push	r29
+ 20e:	00 d0       	rcall	.+0      	; 0x210 <main+0x6>
+ 210:	00 d0       	rcall	.+0      	; 0x212 <main+0x8>
+ 212:	00 d0       	rcall	.+0      	; 0x214 <main+0xa>
+ 214:	cd b7       	in	r28, 0x3d	; 61
+ 216:	de b7       	in	r29, 0x3e	; 62
+	//SET_OUT_DIR(DDRB,0);
+	//PORTB &= ~(1<<0);
+	
+	SET_OUT_DIR(DDRC,0);
+ 218:	a0 9a       	sbi	0x14, 0	; 20
+	PORTC &= ~(1<<0);
+ 21a:	a8 98       	cbi	0x15, 0	; 21
+		.int_s = INTERRUPT_EN,
+		//.cmp_pin = TOGGLE_OC_ON_COMPARE_MATCH,
+		//.cmp_value = 200,
+	};
+	*/
+	gcfg_hal_timer_t my_timer =
+ 21c:	86 e0       	ldi	r24, 0x06	; 6
+ 21e:	e0 e6       	ldi	r30, 0x60	; 96
+ 220:	f0 e0       	ldi	r31, 0x00	; 0
+ 222:	de 01       	movw	r26, r28
+ 224:	11 96       	adiw	r26, 0x01	; 1
+ 226:	01 90       	ld	r0, Z+
+ 228:	0d 92       	st	X+, r0
+ 22a:	8a 95       	dec	r24
+ 22c:	e1 f7       	brne	.-8      	; 0x226 <main+0x1c>
+	};
+	
+	
+	
+	//hal_timer_init(&my_timer_2);
+	hal_timer_init(&my_timer);
+ 22e:	ce 01       	movw	r24, r28
+ 230:	01 96       	adiw	r24, 0x01	; 1
+ 232:	0e 94 41 00 	call	0x82	; 0x82 <hal_timer_init>
+ 236:	ff cf       	rjmp	.-2      	; 0x236 <main+0x2c>
+
+00000238 <_exit>:
+ 238:	f8 94       	cli
+
+0000023a <__stop_program>:
+ 23a:	ff cf       	rjmp	.-2      	; 0x23a <__stop_program>
